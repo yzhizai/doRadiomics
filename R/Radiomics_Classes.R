@@ -1,13 +1,3 @@
-library(glmnet)
-library(caret)
-library(mRMRe)
-library(pROC)
-library(ModelGood)
-library(tidyverse)
-library(officer)
-library(rvg)
-
-
 setOldClass('preProcess')
 setOldClass('lognet')
 setOldClass('roc')
@@ -238,7 +228,9 @@ setMethod('figure.radiomics', signature(object = 'Radiomics'),
 setClass('Label_Score', slots = c(Label = 'factor',
                                   Score = 'numeric',
                                   iROC = 'roc',
-                                  cmat = 'data.frame'))
+                                  cmat = 'data.frame'),
+         prototype = prototype(iROC = structure(list(),
+                                                class = 'roc')))
 
 #' a validate generic function
 #'
