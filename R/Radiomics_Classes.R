@@ -40,12 +40,30 @@ setClass('Radiomics',
 )
 
 
+#' a generic function to use radiomics model to predict
+#'
+#' @param object a Radiomics class
+#' @param ... other argument
+#'
+#' @return
+#' @export
+#'
+#' @examples
 setGeneric('predict.radiomics',
            function(object, ...){
              standardGeneric('predict.radiomics')
            })
 
 
+#' a function to predict the radscore.
+#'
+#' @param object a radiomics model
+#' @param dt a data.frame with the same columns with the training set.
+#'
+#' @return a Label_Score class
+#' @export
+#'
+#' @examples
 setMethod('predict.radiomics', signature = 'Radiomics',
           function(object, dt){
 
@@ -67,12 +85,30 @@ setMethod('predict.radiomics', signature = 'Radiomics',
             out
           })
 
+#' Train model generic function
+#'
+#' @param object a Radiomics model
+#' @param ... other arguments
+#'
+#' @return a updated Radiomics model
+#' @export
+#'
+#' @examples
 setGeneric('run.radiomics',
            function(object, ...){
              standardGeneric('run.radiomics')
            })
 
 
+#' Train model function definition
+#'
+#' @param object a Radiomics model
+#' @param dt the training dataset
+#'
+#' @return a updated Radiomics class
+#' @export
+#'
+#' @examples
 setMethod('run.radiomics', signature = 'Radiomics',
           function(object, dt){
             step_pre0 <- preProcess(dt, method = 'medianImpute')
@@ -117,11 +153,29 @@ setMethod('run.radiomics', signature = 'Radiomics',
             object
           })
 
+#' a plot generic function
+#'
+#' @param object a Label_Score class
+#' @param ... other arguments
+#'
+#' @return output to a designated pptx file
+#' @export
+#'
+#' @examples
 setGeneric('figure.radiomics',
            def = function(object, ...){
              standardGeneric('figure.radiomics')
            })
 
+#' Plot radiomics figures
+#'
+#' @param object Radiomics model
+#' @param fpath an existing pptx file path
+#'
+#' @return no return.
+#' @export
+#'
+#' @examples
 setMethod('figure.radiomics', signature(object = 'Radiomics'),
           definition = function(object, fpath){
             pptx <- read_pptx()
@@ -186,11 +240,27 @@ setClass('Label_Score', slots = c(Label = 'factor',
                                   iROC = 'roc',
                                   cmat = 'data.frame'))
 
+#' a validate generic function
+#'
+#' @param object a Label_Score object
+#'
+#' @return an updated Label_Score object
+#' @export
+#'
+#' @examples
 setGeneric('validate.radiomics',
            def = function(object){
              standardGeneric('validate.radiomics')
            })
 
+#' Function to generate the ROC curve and performance metrics
+#'
+#' @param object a Label_Score object
+#'
+#' @return an updated Label_Score object
+#' @export
+#'
+#' @examples
 setMethod('validate.radiomics', signature(object = 'Label_Score'),
           definition = function(object){
             iROC <- roc(object@Label, object@Score, ci = T)
