@@ -30,30 +30,21 @@ setClass('Radiomics',
 )
 
 
-#' a generic function to use radiomics model to predict
+
+#' A function to predict the radscore
 #'
-#' @param object a Radiomics class
-#' @param ... other argument
+#' @param object a Radiomics object
+#' @param dt the dataset
 #'
-#' @return
+#' @return a Radiomics.out object
 #' @export
 #'
 #' @examples
 setGeneric('predict.radiomics',
-           function(object, ...){
+           function(object, dt){
              standardGeneric('predict.radiomics')
            })
 
-
-#' a function to predict the radscore.
-#'
-#' @param object a radiomics model
-#' @param dt a data.frame with the same columns with the training set.
-#'
-#' @return a Label_Score class
-#' @export
-#'
-#' @examples
 setMethod('predict.radiomics', signature = 'Radiomics',
           function(object, dt){
 
@@ -68,37 +59,27 @@ setMethod('predict.radiomics', signature = 'Radiomics',
             radscore  <- predict(object@fit, newx = as.matrix(dt_radiomics),
                                  s = object@s) %>% c()
 
-            out <- new('Label_Score')
+            out <- new('Radiomics.out')
             out@Label = dt$Label
             out@Score = radscore
 
             out
           })
 
-#' Train model generic function
+
+#' Train radiomics model
 #'
-#' @param object a Radiomics model
-#' @param ... other arguments
+#' @param object a Radiomics object
+#' @param dt the training dataset
 #'
-#' @return a updated Radiomics model
+#' @return a updated Radiomics object
 #' @export
 #'
 #' @examples
 setGeneric('run.radiomics',
-           function(object, ...){
+           function(object, dt){
              standardGeneric('run.radiomics')
            })
-
-
-#' Train model function definition
-#'
-#' @param object a Radiomics model
-#' @param dt the training dataset
-#'
-#' @return a updated Radiomics class
-#' @export
-#'
-#' @examples
 setMethod('run.radiomics', signature = 'Radiomics',
           function(object, dt){
             step_pre0 <- preProcess(dt, method = 'medianImpute')
@@ -143,29 +124,19 @@ setMethod('run.radiomics', signature = 'Radiomics',
             object
           })
 
-#' a plot generic function
+#' Plot radiomics figures
 #'
-#' @param object a Label_Score class
-#' @param ... other arguments
+#' @param object a Radiomics object
+#' @param fpath a pptx file path
 #'
-#' @return output to a designated pptx file
+#' @return
 #' @export
 #'
 #' @examples
 setGeneric('figure.radiomics',
-           def = function(object, ...){
+           def = function(object, fpath){
              standardGeneric('figure.radiomics')
            })
-
-#' Plot radiomics figures
-#'
-#' @param object Radiomics model
-#' @param fpath an existing pptx file path
-#'
-#' @return no return.
-#' @export
-#'
-#' @examples
 setMethod('figure.radiomics', signature(object = 'Radiomics'),
           definition = function(object, fpath){
             pptx <- read_pptx()
@@ -221,22 +192,22 @@ setMethod('figure.radiomics', signature(object = 'Radiomics'),
 #' @slot iROC roc curve
 #' @slot cmat the metric of the model
 #'
-#' @return a 'Label_Score' class
+#' @return a 'Radiomics.out' class
 #' @export
 #'
 #' @examples
-setClass('Label_Score', slots = c(Label = 'factor',
+setClass('Radiomics.out', slots = c(Label = 'factor',
                                   Score = 'numeric',
                                   iROC = 'roc',
                                   cmat = 'data.frame'),
          prototype = prototype(iROC = structure(list(),
                                                 class = 'roc')))
 
-#' a validate generic function
+#' Function to generate the ROC curve and performance metrics
 #'
-#' @param object a Label_Score object
+#' @param object a Radiomics.out object
 #'
-#' @return an updated Label_Score object
+#' @return an updated Radiomics.out object
 #' @export
 #'
 #' @examples
@@ -244,16 +215,7 @@ setGeneric('validate.radiomics',
            def = function(object){
              standardGeneric('validate.radiomics')
            })
-
-#' Function to generate the ROC curve and performance metrics
-#'
-#' @param object a Label_Score object
-#'
-#' @return an updated Label_Score object
-#' @export
-#'
-#' @examples
-setMethod('validate.radiomics', signature(object = 'Label_Score'),
+setMethod('validate.radiomics', signature(object = 'Radiomics.out'),
           definition = function(object){
             iROC <- roc(object@Label, object@Score, ci = T)
             object@iROC <- iROC
@@ -262,7 +224,6 @@ setMethod('validate.radiomics', signature(object = 'Label_Score'),
                            ret = c('threshold', 'accuracy', 'sensitivity',
                                    'specificity', 'ppv', 'npv'))
 
-            knitr::kable(imat, format = 'simple', digits = 3)
             object@cmat <- imat
 
             object
