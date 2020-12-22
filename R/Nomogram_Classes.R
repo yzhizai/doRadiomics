@@ -128,12 +128,12 @@ setMethod('predict.nomogram', signature(x = 'Nomogram'),
 #' @export
 #'
 #' @examples
-setGeneric('plot_nomogram',
+setGeneric('figure.nomogram',
            def = function(x, dt, fpath){
-             standardGeneric('plot_nomogram')
+             standardGeneric('figure.nomogram')
            })
 
-setMethod('plot_nomogram', signature(x = 'Nomogram'),
+setMethod('figure.nomogram', signature(x = 'Nomogram'),
           definition = function(x, dt, fpath){
 
             dt.nom <- model.frame(x@fit, data = dt)
