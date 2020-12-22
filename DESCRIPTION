@@ -21,4 +21,5 @@ Depends:
     mRMRe,
     officer,
     rvg,
-    readr
+    readr,
+    Publish
