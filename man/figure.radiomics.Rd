@@ -2,18 +2,18 @@
 % Please edit documentation in R/Radiomics_Classes.R
 \name{figure.radiomics}
 \alias{figure.radiomics}
-\title{a plot generic function}
+\title{Plot radiomics figures}
 \usage{
-figure.radiomics(object, ...)
+figure.radiomics(object, fpath)
 }
 \arguments{
-\item{object}{a Label_Score class}
+\item{object}{a Radiomics object}
 
-\item{...}{other arguments}
+\item{fpath}{a pptx file path}
 }
 \value{
-output to a designated pptx file
+
 }
 \description{
-a plot generic function
+Plot radiomics figures
 }

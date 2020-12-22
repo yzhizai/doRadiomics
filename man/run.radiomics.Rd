@@ -2,18 +2,18 @@
 % Please edit documentation in R/Radiomics_Classes.R
 \name{run.radiomics}
 \alias{run.radiomics}
-\title{Train model generic function}
+\title{Train radiomics model}
 \usage{
-run.radiomics(object, ...)
+run.radiomics(object, dt)
 }
 \arguments{
-\item{object}{a Radiomics model}
+\item{object}{a Radiomics object}
 
-\item{...}{other arguments}
+\item{dt}{the training dataset}
 }
 \value{
-a updated Radiomics model
+a updated Radiomics object
 }
 \description{
-Train model generic function
+Train radiomics model
 }

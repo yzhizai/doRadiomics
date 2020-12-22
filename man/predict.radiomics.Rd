@@ -2,18 +2,18 @@
 % Please edit documentation in R/Radiomics_Classes.R
 \name{predict.radiomics}
 \alias{predict.radiomics}
-\title{a generic function to use radiomics model to predict}
+\title{A function to predict the radscore}
 \usage{
-predict.radiomics(object, ...)
+predict.radiomics(object, dt)
 }
 \arguments{
-\item{object}{a Radiomics class}
+\item{object}{a Radiomics object}
 
-\item{...}{other argument}
+\item{dt}{the dataset}
 }
 \value{
-
+a Radiomics.out object
 }
 \description{
-a generic function to use radiomics model to predict
+A function to predict the radscore
 }

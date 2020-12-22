@@ -2,16 +2,16 @@
 % Please edit documentation in R/Radiomics_Classes.R
 \name{validate.radiomics}
 \alias{validate.radiomics}
-\title{a validate generic function}
+\title{Function to generate the ROC curve and performance metrics}
 \usage{
 validate.radiomics(object)
 }
 \arguments{
-\item{object}{a Label_Score object}
+\item{object}{a Radiomics.out object}
 }
 \value{
-an updated Label_Score object
+an updated Radiomics.out object
 }
 \description{
-a validate generic function
+Function to generate the ROC curve and performance metrics
 }
