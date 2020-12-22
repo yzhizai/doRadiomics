@@ -88,15 +88,15 @@ setClass('Nomogram.out',
 
 #' Using the nomogram model to predict the nomogram score
 #'
-#' @param a nomogram object
-#' @param ... the dataset used to predict
+#' @param x a Nomogram object
+#' @param dt the dataset
 #'
 #' @return a 'Nomogram.out' object
 #' @export
 #'
 #' @examples
 setGeneric('predict.nomogram',
-           def = function(x, ...){
+           def = function(x, dt){
              standardGeneric('predict.nomogram')
            })
 
