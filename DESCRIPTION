@@ -22,4 +22,5 @@ Depends:
     officer,
     rvg,
     readr,
-    Publish
+    Publish,
+    rms
