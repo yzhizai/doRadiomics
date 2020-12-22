@@ -32,10 +32,10 @@ devtools::install_github("yzhizai/doRadiomics")
 
 This is a basic example which shows you how to solve a common problem:
 
-```r
+```{r example}
 library(doRadiomics)
 ## basic example code
-dt <- read_csv('dataset_radiomics.csv')
+dt <- dataset.radiomics
 model <- new('Radiomics')
 model <- run.radiomics(model, dt)
 # before run the figure.radiomics function, you should create a pptx file at first,
@@ -45,7 +45,7 @@ figure.radiomics(model, 'output.pptx')
 
 
 
-dt <- read_csv('data_clinics.csv')
+dt <- dataset.nomogram
 nomogram.model <- new('Nomogram')
 nomogram.model@uni_p_thresh <- 0.05
 nomogram.model <- run.nomogram(nomogram.model, dt)

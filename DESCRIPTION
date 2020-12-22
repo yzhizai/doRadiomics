@@ -23,4 +23,5 @@ Depends:
     rvg,
     readr,
     Publish,
-    rms
+    rms,
+    R (>= 2.10)
