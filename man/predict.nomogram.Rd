@@ -4,12 +4,12 @@
 \alias{predict.nomogram}
 \title{Using the nomogram model to predict the nomogram score}
 \usage{
-predict.nomogram(x, ...)
+predict.nomogram(x, dt)
 }
 \arguments{
-\item{...}{the dataset used to predict}
+\item{x}{a Nomogram object}
 
-\item{a}{nomogram object}
+\item{dt}{the dataset}
 }
 \value{
 a 'Nomogram.out' object
