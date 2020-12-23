@@ -139,7 +139,15 @@ setGeneric('figure.radiomics',
            })
 setMethod('figure.radiomics', signature(object = 'Radiomics'),
           definition = function(object, fpath){
-            pptx <- read_pptx()
+
+            if(file.exists(fpath))
+            {
+              pptx <- read_pptx(path = fpath)
+            }
+            else
+            {
+              pptx <- read_pptx()
+            }
 
             pptx <- add_slide(pptx)
 

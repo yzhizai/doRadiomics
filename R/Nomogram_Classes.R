@@ -145,7 +145,14 @@ setMethod('figure.nomogram', signature(x = 'Nomogram'),
             nom_com <- nomogram(mod_train, lp = F, fun = plogis, fun.at = c(0.1, 0.4, 0.9),
                                 funlabel = 'Risk')
 
-            pptx <- read_pptx()
+            if(file.exists(fpath))
+            {
+              pptx <- read_pptx(path = fpath)
+            }
+            else
+            {
+              pptx <- read_pptx()
+            }
             pptx <- add_slide(pptx, layout = 'Title and Content')
 
 
