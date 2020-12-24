@@ -349,7 +349,7 @@ setMethod('predict.nomogram', signature(x = 'Nomogram'),
             nomo.score <- predict(x@fit, newdata = dt.final, type = 'response')
 
             nomo.out <- new('Nomogram.out',
-                            Label = dt.final$Label,
+                            Label = as.factor(dt.final$Label),
                             Score = nomo.score,
                             ulogit = res_ulogit,
                             mlogit = publish(res_mlogit)$regressionTable)
