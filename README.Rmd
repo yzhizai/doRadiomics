@@ -32,25 +32,24 @@ devtools::install_github("yzhizai/doRadiomics")
 
 This is a basic example which shows you how to solve a common problem:
 
-```{r example}
+```{r example, eval=FALSE}
 library(doRadiomics)
 ## basic example code
 dt <- dataset.radiomics
-model <- new('Radiomics')
-model <- run.radiomics(model, dt)
-# before run the figure.radiomics function, you should create a pptx file at first,
-# and confirm the file is closed.
-radi.out.train <- predict.radiomics(model, dt) %>% validate.radiomics()
-figure.radiomics(model, 'output.pptx')
 
+model <- new('Radiomics')
+
+model <- run.radiomics(model, dt)
+
+out.1 <- predict.radiomics(model, dt) %>% validate.radiomics()
 
 
 dt <- dataset.nomogram
-nomogram.model <- new('Nomogram')
-nomogram.model@uni_p_thresh <- 0.05
-nomogram.model <- run.nomogram(nomogram.model, dt)
-nomo.out.train <- predict.nomogram(nomogram.model, dt)
 
-figure.nomogram(nomogram.model, dt, 'output.pptx')
+model <- new('Nomogram', uni_p_thresh = 0.05)
+model <- run.nomogram(model, dt)
+
+out.3 <- predict.nomogram(model, dt) %>% validate.nomogram()
+
+compare.model(out.1, out.3, 'output.pptx')
 ```
-
