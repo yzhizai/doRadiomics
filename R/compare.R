@@ -1,4 +1,4 @@
-#' Compare tow model
+#' Compare two model
 #'
 #' @param obj1 an Radiomics.out or Nomogram.out object
 #' @param obj2 an Radiomics.out or Nomogram.out object
