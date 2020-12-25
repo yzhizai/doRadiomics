@@ -25,4 +25,5 @@ Depends:
     readr,
     Publish,
     rms,
-    R (>= 2.10)
+    R (>= 2.10),
+    PredictABEL
