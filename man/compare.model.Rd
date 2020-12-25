@@ -2,7 +2,7 @@
 % Please edit documentation in R/compare.R
 \name{compare.model}
 \alias{compare.model}
-\title{Compare tow model}
+\title{Compare two model}
 \usage{
 compare.model(obj1, obj2, fpath)
 }
@@ -17,5 +17,5 @@ compare.model(obj1, obj2, fpath)
 output the results in fpath
 }
 \description{
-Compare tow model
+Compare two model
 }
