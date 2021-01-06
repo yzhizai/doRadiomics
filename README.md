@@ -32,6 +32,8 @@ model <- new('Radiomics')
 
 model <- run.radiomics(model, dt)
 
+figure.radiomics(model, 'output.pptx')
+
 out.1 <- predict.radiomics(model, dt) %>% validate.radiomics()
 
 
@@ -39,6 +41,8 @@ dt <- dataset.nomogram
 
 model <- new('Nomogram', uni_p_thresh = 0.05)
 model <- run.nomogram(model, dt)
+
+figure.nomogram(model, dt, 'output.pptx')
 
 out.3 <- predict.nomogram(model, dt) %>% validate.nomogram()
 
