@@ -4,7 +4,7 @@
 \alias{figure.nomogram}
 \title{The function to plot nomogram}
 \usage{
-figure.nomogram(x, dt, fpath)
+figure.nomogram(x, dt, fpath, fun.at)
 }
 \arguments{
 \item{x}{a nomogram object}
@@ -12,6 +12,8 @@ figure.nomogram(x, dt, fpath)
 \item{dt}{the training dataset}
 
 \item{fpath}{the output pptx file}
+
+\item{fun.at}{function values to label on axis}
 }
 \description{
 The function to plot nomogram

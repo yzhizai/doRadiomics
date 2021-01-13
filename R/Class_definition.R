@@ -390,6 +390,7 @@ setMethod('validate.nomogram', signature = signature(object = 'Nomogram.out'),
 #' @param x a nomogram object
 #' @param dt the training dataset
 #' @param fpath the output pptx file
+#' @param fun.at function values to label on axis
 #'
 #' @export
 #'
