@@ -42,7 +42,7 @@ dt <- dataset.nomogram
 model <- new('Nomogram', uni_p_thresh = 0.05)
 model <- run.nomogram(model, dt)
 
-figure.nomogram(model, dt, 'output.pptx')
+figure.nomogram(model, dt, 'output.pptx', fun.at = c(0.1, 0.4, 0.9))
 
 out.3 <- predict.nomogram(model, dt) %>% validate.nomogram()
 
