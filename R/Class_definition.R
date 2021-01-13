@@ -395,12 +395,12 @@ setMethod('validate.nomogram', signature = signature(object = 'Nomogram.out'),
 #'
 #' @examples
 setGeneric('figure.nomogram',
-           def = function(x, dt, fpath){
+           def = function(x, dt, fpath, fun.at){
              standardGeneric('figure.nomogram')
            })
 
 setMethod('figure.nomogram', signature(x = 'Nomogram'),
-          definition = function(x, dt, fpath){
+          definition = function(x, dt, fpath, fun.at){
 
             dt.nom <- model.frame(x@fit, data = dt)
             ddist_train_com <<- datadist(dt.nom)
@@ -408,7 +408,7 @@ setMethod('figure.nomogram', signature(x = 'Nomogram'),
             mod_train <- lrm(Label~.,
                              data = dt.nom, x = TRUE, y = TRUE)
 
-            nom_com <- nomogram(mod_train, lp = F, fun = plogis, fun.at = c(0.1, 0.3, 0.6, 0.9),
+            nom_com <- nomogram(mod_train, lp = F, fun = plogis, fun.at = fun.at,
                                 funlabel = 'Risk')
 
             if(file.exists(fpath))
