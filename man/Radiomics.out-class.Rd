@@ -20,5 +20,7 @@ a class output by run.radiomics
 \item{\code{iROC}}{roc curve}
 
 \item{\code{cmat}}{the metric of the model}
+
+\item{\code{threshold}}{model threshold}
 }}
 

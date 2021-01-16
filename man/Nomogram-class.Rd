@@ -18,5 +18,7 @@ Nomogram class
 \item{\code{fit}}{the model of nomogram}
 
 \item{\code{formula}}{the formula of the Nomoscore}
+
+\item{\code{threshold}}{model threshold}
 }}
 

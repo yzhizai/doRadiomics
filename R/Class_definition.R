@@ -12,6 +12,7 @@ setOldClass('cv.glmnet')
 #' @slot fit a glmnet output fit model
 #' @slot cvfit a cv.glmnet output fit model
 #' @slot s the best lambda value
+#' @slot threshold the model threshold
 #'
 #' @return
 #' @export
@@ -25,7 +26,8 @@ setClass('Radiomics',
                    useful_name = 'character',
                    fit = 'lognet',
                    cvfit = 'cv.glmnet',
-                   s = 'numeric'
+                   s = 'numeric',
+                   threshold = 'numeric'
          )
 )
 
@@ -62,6 +64,7 @@ setMethod('predict.radiomics', signature = 'Radiomics',
             out <- new('Radiomics.out')
             out@Label = dt$Label
             out@Score = radscore
+            out@threshold = object@threshold
 
             out
           })
@@ -113,6 +116,12 @@ setMethod('run.radiomics', signature = 'Radiomics',
 
             s <- cv.fit$lambda.min
 
+            score <- predict(fit, s = s) %>% c()
+            iroc <- roc(y, score)
+            threshold <- coords(iroc, x = 'best', transpose = F,
+                                ret = 'threshold')
+            threshold <- threshold$threshold[1]
+
             object@step_pre0 <- step_pre0
             object@step_pre1 <- step_pre1
             object@names.dt <- names.dt
@@ -120,6 +129,7 @@ setMethod('run.radiomics', signature = 'Radiomics',
             object@cvfit <- cv.fit
             object@fit <- fit
             object@s <- s
+            object@threshold <- threshold
 
             object
           })
@@ -199,6 +209,7 @@ setMethod('figure.radiomics', signature(object = 'Radiomics'),
 #' @slot Score the radscore calculated by the model
 #' @slot iROC roc curve
 #' @slot cmat the metric of the model
+#' @slot threshold model threshold
 #'
 #' @return a 'Radiomics.out' class
 #' @export
@@ -207,7 +218,8 @@ setMethod('figure.radiomics', signature(object = 'Radiomics'),
 setClass('Radiomics.out', slots = c(Label = 'factor',
                                     Score = 'numeric',
                                     iROC = 'roc',
-                                    cmat = 'data.frame'),
+                                    cmat = 'data.frame',
+                                    threshold = 'numeric'),
          prototype = prototype(iROC = structure(list(),
                                                 class = 'roc')))
 
@@ -228,7 +240,8 @@ setMethod('validate.radiomics', signature(object = 'Radiomics.out'),
             iROC <- roc(object@Label, object@Score, ci = T)
             object@iROC <- iROC
 
-            imat <- coords(iROC, x = 'best', transpose = F,
+            imat <- coords(iROC, x = object@threshold, transpose = F,
+                           input = 'threshold',
                            ret = c('threshold', 'accuracy', 'sensitivity',
                                    'specificity', 'ppv', 'npv'))
 
@@ -245,6 +258,7 @@ setOldClass('glm')
 #' @slot uni_p_thresh the threshold determined for selecting the features
 #' @slot fit the model of nomogram
 #' @slot formula the formula of the Nomoscore
+#' @slot threshold model threshold
 #'
 #' @return a nomogram object
 #' @export
@@ -253,7 +267,8 @@ setOldClass('glm')
 setClass('Nomogram',
          slots = c(uni_p_thresh = 'numeric',
                    fit = c('glm'),
-                   formula = 'character'
+                   formula = 'character',
+                   threshold = 'numeric'
          ), prototype = prototype(fit = structure(list(), class = 'glm')))
 
 #' Train nomogram model
@@ -296,12 +311,20 @@ setMethod('run.nomogram', signature(x = 'Nomogram', dt = 'data.frame'),
             }
             fit <- step(log_fit)
 
+            score <- predict(fit, type = 'response')
+
+            iroc <- roc(dt$Label, score)
+            threshold <- coords(iroc, x = 'best', transpose = F,
+                                ret = 'threshold')
+            threshold <- threshold$threshold[1]
+
             coef_nom <- coef(fit)
             nomo_score <- paste('Nomoscore =',
                                 paste(names(coef_nom), coef_nom, sep = '*') %>% paste(collapse = '+'))
 
             x@formula <- nomo_score
             x@fit <- fit
+            x@threshold <- threshold
 
             x
           })
@@ -352,7 +375,8 @@ setMethod('predict.nomogram', signature(x = 'Nomogram'),
                             Label = as.factor(dt.final$Label),
                             Score = nomo.score,
                             ulogit = res_ulogit,
-                            mlogit = publish(res_mlogit)$regressionTable)
+                            mlogit = publish(res_mlogit)$regressionTable,
+                            threshold= x@threshold)
 
             nomo.out
           })
@@ -376,7 +400,8 @@ setMethod('validate.nomogram', signature = signature(object = 'Nomogram.out'),
             iROC <- roc(object@Label, object@Score, ci = T)
             object@iROC <- iROC
 
-            imat <- coords(iROC, x = 'best', transpose = F,
+            imat <- coords(iROC, x = object@threshold, transpose = F,
+                           input = 'threshold',
                            ret = c('threshold', 'accuracy', 'sensitivity',
                                    'specificity', 'ppv', 'npv'))
 

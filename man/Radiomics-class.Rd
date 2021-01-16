@@ -26,6 +26,8 @@ A radiomics class
 \item{\code{cvfit}}{a cv.glmnet output fit model}
 
 \item{\code{s}}{the best lambda value}
+
+\item{\code{threshold}}{the model threshold}
 }}
 
 \examples{
