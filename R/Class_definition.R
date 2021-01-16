@@ -116,7 +116,7 @@ setMethod('run.radiomics', signature = 'Radiomics',
 
             s <- cv.fit$lambda.min
 
-            score <- predict(fit, s = s) %>% c()
+            score <- predict(fit, newx = x, s = s) %>% c()
             iroc <- roc(y, score)
             threshold <- coords(iroc, x = 'best', transpose = F,
                                 ret = 'threshold')
