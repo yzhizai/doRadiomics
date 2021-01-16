@@ -85,6 +85,7 @@ setGeneric('run.radiomics',
            })
 setMethod('run.radiomics', signature = 'Radiomics',
           function(object, dt){
+            dt$Label <- factor(dt$Label, ordered = T)
             step_pre0 <- preProcess(dt, method = 'medianImpute')
             dt <- predict(step_pre0, dt)
 
