@@ -4,7 +4,6 @@
 # doRadiomics
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 The goal of doRadiomics is to do radiomics analysis.
@@ -30,7 +29,7 @@ dt <- dataset.radiomics
 
 model <- new('Radiomics')
 
-model <- run.radiomics(model, dt)
+model <- run.radiomics(model, dt, num_feature = 20)
 
 figure.radiomics(model, 'output.pptx')
 

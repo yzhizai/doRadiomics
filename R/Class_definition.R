@@ -74,17 +74,18 @@ setMethod('predict.radiomics', signature = 'Radiomics',
 #'
 #' @param object a Radiomics object
 #' @param dt the training dataset
+#' @param num_feature the number of feature remained after mRMR
 #'
 #' @return a updated Radiomics object
 #' @export
 #'
 #' @examples
 setGeneric('run.radiomics',
-           function(object, dt){
+           function(object, dt, num_feature){
              standardGeneric('run.radiomics')
            })
 setMethod('run.radiomics', signature = 'Radiomics',
-          function(object, dt){
+          function(object, dt, num_feature){
             dt$Label <- factor(dt$Label, ordered = T)
             step_pre0 <- preProcess(dt, method = 'medianImpute')
             dt <- predict(step_pre0, dt)
@@ -102,7 +103,7 @@ setMethod('run.radiomics', signature = 'Radiomics',
 
 
             dt_mrmr <- mRMR.data(dt_pre)
-            f_sel <- mRMR.classic(data = dt_mrmr, target_indices = c(1), feature_count = 20)
+            f_sel <- mRMR.classic(data = dt_mrmr, target_indices = c(1), feature_count = num_feature)
 
             # browser()
             useful_name <- featureNames(f_sel)[unlist(solutions(f_sel))]

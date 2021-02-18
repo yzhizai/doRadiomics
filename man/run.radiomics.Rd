@@ -4,12 +4,14 @@
 \alias{run.radiomics}
 \title{Train radiomics model}
 \usage{
-run.radiomics(object, dt)
+run.radiomics(object, dt, num_feature)
 }
 \arguments{
 \item{object}{a Radiomics object}
 
 \item{dt}{the training dataset}
+
+\item{num_feature}{the number of feature remained after mRMR}
 }
 \value{
 a updated Radiomics object
