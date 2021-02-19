@@ -96,6 +96,15 @@ setMethod('run.radiomics', signature = 'Radiomics',
               dt <- dt[, -idx.nzv]
             }
 
+            u.form <- paste(colnames(dt)[1],
+                            paste(colnames(dt)[-1], collapse = '+'),
+                            sep = '~') %>% as.formula()
+            u.test <- univariateTable(u.form, data = dt, show.totals = F, digits = 3)
+
+            sel.names <- names(which(u.test$p.value < 0.01))
+
+            dt <- select(dt, c('Label', sel.names))
+
             names.dt <- colnames(dt)
 
             step_pre1 <- preProcess(dt, method = c('center', 'scale'))
@@ -117,6 +126,126 @@ setMethod('run.radiomics', signature = 'Radiomics',
             fit <- glmnet(x, y, family = 'binomial')
 
             s <- cv.fit$lambda.min
+
+            score <- predict(fit, newx = x, s = s) %>% c()
+            iroc <- roc(y, score)
+            threshold <- coords(iroc, x = 'best', transpose = F,
+                                ret = 'threshold')
+            threshold <- threshold$threshold[1]
+
+            object@step_pre0 <- step_pre0
+            object@step_pre1 <- step_pre1
+            object@names.dt <- names.dt
+            object@useful_name <- useful_name
+            object@cvfit <- cv.fit
+            object@fit <- fit
+            object@s <- s
+            object@threshold <- threshold
+
+            object
+          })
+
+#' cross-validation training using 100 LGOCV
+#'
+#' @param object a Radiomics object
+#' @param dt a training dataset
+#' @param num_feature  the number of feature remained after mRMR
+#'
+#' @return
+#' @export
+#'
+#' @examples
+setGeneric('cv.run.radiomics',
+           function(object, dt, num_feature){
+             standardGeneric('cv.run.radiomics')
+           })
+setMethod('cv.run.radiomics', signature = 'Radiomics',
+          function(object, dt, num_feature){
+            dt$Label <- factor(dt$Label, ordered = T)
+            step_pre0 <- preProcess(dt, method = 'medianImpute')
+            dt <- predict(step_pre0, dt)
+
+            idx.nzv <- nearZeroVar(dt)
+            if(!is_empty(idx.nzv))
+            {
+              dt <- dt[, -idx.nzv]
+            }
+
+            u.form <- paste(colnames(dt)[1],
+                            paste(colnames(dt)[-1], collapse = '+'),
+                            sep = '~') %>% as.formula()
+            u.test <- univariateTable(u.form, data = dt, show.totals = F, digits = 3)
+
+            sel.names <- names(which(u.test$p.value < 0.01))
+
+            dt <- select(dt, c('Label', sel.names))
+
+            names.dt <- colnames(dt)
+
+            step_pre1 <- preProcess(dt, method = c('center', 'scale'))
+            dt_pre <- predict(step_pre1, dt) %>% as.data.frame
+
+            auc.list <- list()
+            s.list <- list()
+            fit.list <- list()
+            cvfit.list <- list()
+            dt.list <- list()
+            for(i_a in 1:100)
+            {
+              idx.train <- createDataPartition(dt_pre$Label, p = 0.6, list = F) %>% c()
+              dt.train <- dt_pre[idx.train, ]
+              dt.test <- dt_pre[-idx.train, ]
+
+              dt_mrmr <- mRMR.data(dt.train)
+              f_sel <- mRMR.classic(data = dt_mrmr, target_indices = c(1), feature_count = num_feature)
+
+              # browser()
+              useful_name <- featureNames(f_sel)[unlist(solutions(f_sel))]
+
+              dt.train <- select(dt.train, c('Label', useful_name))
+              dt.test <- select(dt.test, c('Label', useful_name))
+
+              dt.final <- bind_rows(dt.train, dt.test)
+
+              x <- as.matrix(dt.train[, -1])
+              y <- dt.train$Label
+
+              x.test <- as.matrix(dt.test[, -1])
+              y.test <- dt.test$Label
+              cv.fit <- cv.glmnet(x, y, family = 'binomial')
+              fit <- glmnet(x, y, family = 'binomial')
+
+              s <- cv.fit$lambda.min
+
+
+              score.train <- predict(fit, newx = x, s = s)
+              iroc.train <- roc(y, score.train)
+
+              score.test <- predict(fit, newx = x.test, s = s)
+              iroc.test <- roc(y.test, score.test)
+
+              if(identical(iroc.train$direction, iroc.test$direction))
+              {
+                auc.list[[i_a]] <- auc(iroc.test)
+              } else
+              {
+                auc.list[[i_a]] <- 0
+              }
+
+              auc.list[[i_a]] <- auc(iroc.test)
+              s.list[[i_a]] <- s
+              fit.list[[i_a]] <- fit
+              cvfit.list[[i_a]] <- cv.fit
+              dt.list[[i_a]] <- dt.final
+            }
+
+            idx.final <- which.max(unlist(auc.list))
+            s <- s.list[[idx.final]]
+            fit <- fit.list[[idx.final]]
+            cv.fit <- cvfit.list[[idx.final]]
+            dt.final <- dt.list[[idx.final]]
+            x <- as.matrix(dt.final[, -1])
+            y <- dt.final$Label
 
             score <- predict(fit, newx = x, s = s) %>% c()
             iroc <- roc(y, score)
