@@ -101,7 +101,7 @@ setMethod('run.radiomics', signature = 'Radiomics',
                             sep = '~') %>% as.formula()
             u.test <- univariateTable(u.form, data = dt, show.totals = F, digits = 3)
 
-            sel.names <- names(which(u.test$p.value < 0.01))
+            sel.names <- names(which(u.test$p.value < 0.05))
 
             dt <- select(dt, c('Label', sel.names))
 
@@ -176,7 +176,7 @@ setMethod('cv.run.radiomics', signature = 'Radiomics',
                             sep = '~') %>% as.formula()
             u.test <- univariateTable(u.form, data = dt, show.totals = F, digits = 3)
 
-            sel.names <- names(which(u.test$p.value < 0.01))
+            sel.names <- names(which(u.test$p.value < 0.05))
 
             dt <- select(dt, c('Label', sel.names))
 
