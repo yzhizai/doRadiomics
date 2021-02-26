@@ -331,6 +331,11 @@ setMethod('figure.radiomics', signature(object = 'Radiomics'),
                     location = ph_location_type(type = 'title'))
             ph_with(pptx, value = plt.coef, location = ph_location_type(type = 'body'))
 
+            pptx <- add_slide(pptx)
+
+            ph_with(pptx, value = paste(dt_coef$Coef, dt_coef$Feature, sep = '*') %>% paste(collapse = '+') %>% paste(coefs@x[1], sep = '+'),
+                    location = ph_location_type(type = 'body'))
+
             print(pptx, target = fpath)
           })
 
