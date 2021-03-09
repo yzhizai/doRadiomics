@@ -116,6 +116,7 @@ setMethod('run.radiomics', signature = 'Radiomics',
 
             # browser()
             useful_name <- featureNames(f_sel)[unlist(solutions(f_sel))]
+            useful_name <- setdiff(useful_name, 'Label')
 
             dt_pre <- select(dt_pre, c('Label', useful_name))
 
