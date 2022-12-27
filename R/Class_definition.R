@@ -588,7 +588,7 @@ setMethod('figure.nomogram', signature(x = 'Nomogram'),
             ph_with(pptx, value = 'Nomogram', location = ph_location_type(type = 'title'))
             ph_with(pptx, value = nom.figure, location = ph_location_type(type = 'body'))
 
-            pptx <- add_slide()
+            pptx <- add_slide(pptx)
             ph_with(pptx, value = publish(x@fit) %>% pluck('regressionTable'),
                     location = ph_location_type(type = 'body'))
 
