@@ -13,9 +13,6 @@ cv.run.radiomics(object, dt, num_feature)
 
 \item{num_feature}{the number of feature remained after mRMR}
 }
-\value{
-
-}
 \description{
 cross-validation training using 100 LGOCV
 }

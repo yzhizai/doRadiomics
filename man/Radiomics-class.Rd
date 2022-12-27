@@ -4,9 +4,6 @@
 \name{Radiomics-class}
 \alias{Radiomics-class}
 \title{A radiomics class}
-\value{
-
-}
 \description{
 A radiomics class
 }

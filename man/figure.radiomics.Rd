@@ -11,9 +11,6 @@ figure.radiomics(object, fpath)
 
 \item{fpath}{a pptx file path}
 }
-\value{
-
-}
 \description{
 Plot radiomics figures
 }

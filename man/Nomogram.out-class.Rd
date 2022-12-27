@@ -4,9 +4,6 @@
 \name{Nomogram.out-class}
 \alias{Nomogram.out-class}
 \title{A nomogram output class}
-\value{
-
-}
 \description{
 A nomogram output class
 }
